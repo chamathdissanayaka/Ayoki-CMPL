@@ -34,7 +34,5 @@ exec(compile(ast.parse(patched), "<string>", "exec"),
 
 discord.gateway.DiscordWebSocket.identify = loc["identify"]
 
-with open("token.0", "r", encoding="utf-8") as f:
-    botostoken = f.read()
 
 bot.run('OTEyODk5MDA2OTkxMDY1MTQ4.YZ2pdA.CAQPvXpNLmwmkBcMgyhg4td5K6I')
