@@ -35,4 +35,4 @@ exec(compile(ast.parse(patched), "<string>", "exec"),
 discord.gateway.DiscordWebSocket.identify = loc["identify"]
 
 
-bot.run('OTEyODk5MDA2OTkxMDY1MTQ4.YZ2pdA.CAQPvXpNLmwmkBcMgyhg4td5K6I')
+bot.run(token)
