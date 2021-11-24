@@ -1,1 +1,1 @@
-Worker: python Ayoki-Bot.py
+worker: python Ayoki-Bot.py
