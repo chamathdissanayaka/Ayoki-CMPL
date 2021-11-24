@@ -3,9 +3,8 @@ import inspect
 import re
 import ast
 import os
-import json
-
 from discord.ext import commands
+
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='<', intents=intents)
@@ -13,7 +12,12 @@ bot = commands.Bot(command_prefix='<', intents=intents)
 
 @bot.event
 async def on_ready():
-    print("cute Ayoki online!!")
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="<help for Cuddles💞"))
+    print('cutee Ayoki online!!')
+
+for filename in os.listdir('C:/Users/Chamath/Documents/GitHub/Ayoki-CMPL/cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
 
 
 def source(o):
