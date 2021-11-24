@@ -15,7 +15,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="<help for Cuddles💞"))
     print('cutee Ayoki online!!')
 
-for filename in os.listdir('C:/Users/Chamath/Documents/GitHub/Ayoki-CMPL/cogs'):
+for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         bot.load_extension(f'cogs.{filename[:-3]}')
 
