@@ -5,13 +5,13 @@ import time
 import os
 
 
-class Compile(commands.Cog):
+class Compiler(commands.Cog):
 
     def __init__(self, client):
         self.client = client
 
     # --------------commands
-    @commands.command(help='compiles python program.')
+    @commands.command(help='compiles python Code.')
     async def eval(self, ctx, *, arg):
         """
         : Do <`code here`
@@ -55,4 +55,4 @@ class Compile(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Compile(bot))
+    bot.add_cog(Compiler(bot))
