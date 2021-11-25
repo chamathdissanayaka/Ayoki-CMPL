@@ -6,7 +6,7 @@ import os, aiohttp, random, asyncio, json
 from discord.ext import commands
 from discord_components import *
 from typing import List
-
+import discord.ui
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='<', intents=intents)
