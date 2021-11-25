@@ -1,7 +1,5 @@
 import pkg_resources
-import contextlib
 import sys
-import inspect
 import os
 import shutil
 import glob
@@ -15,20 +13,16 @@ from traceback import format_exc
 from contextlib import redirect_stdout
 
 # Common imports that can be used by the debugger.
-import requests
-import json
-import gc
+
 import datetime
-import time
 import traceback
 import re
 import io
 import asyncio
 import discord
-import random
 import subprocess
 from bs4 import BeautifulSoup
-import urllib
+
 
 from cogs.utils.checks import embed_perms, hastebin
 
