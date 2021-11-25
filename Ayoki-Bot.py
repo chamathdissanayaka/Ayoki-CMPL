@@ -14,7 +14,8 @@ bot = commands.Bot(command_prefix='<', intents=intents)
 async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="<help for Cuddles💞"))
     print('cutee Ayoki online!!')
-@bot.command(pass_context=True, help='send Gifs', categories=': DO `<` `gif name`')
+
+@bot.command(pass_context=True, help='send Gifs')
 async def gif(ctx, *, search):
     async with ctx.typing():
         await asyncio.sleep(0.1)
