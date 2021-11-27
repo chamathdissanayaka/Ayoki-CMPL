@@ -6,7 +6,7 @@ class Server_Information(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help=':Get the information about this server \n:Do <serverinfo')
+    @commands.command(help=':Get the information about this server')
     async def serverinfo(self, ctx):
         async with ctx.typing():
             await asyncio.sleep(0.1)

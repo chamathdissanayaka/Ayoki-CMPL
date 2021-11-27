@@ -6,7 +6,7 @@ class UserInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(help='Get the Information about the any User')
     async def userinfo(self, ctx, *, user: discord.Member = None):
         async with ctx.typing():
             await asyncio.sleep(0.1)  # b'\xfc'
