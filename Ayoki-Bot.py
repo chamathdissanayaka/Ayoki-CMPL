@@ -5,7 +5,6 @@ import os, asyncio, json, re, ast, inspect
 from discord import Guild, utils
 import discord
 from typing import List
-from discord.commands import slash_command
 
 def source(o):
     s = inspect.getsource(o).split("\n")
