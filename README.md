@@ -1,6 +1,8 @@
-# This is Discord Bot ~Ayoki~
+# Ayoki
 
-# About Development
+> Contructions on_going Discord Bot
 
-> This Bot is Developed by **@Chama** and My Daddy **@Yeti**
+## Source (_Library_)
 
+> The Library used for creating this Bot is **PyCord**
+> _Which the Main Contrbuters are Big fans of **PyCord**_

@@ -2,8 +2,10 @@ from discord.ext.commands.context import Context
 from discord.ext.commands import has_permissions
 from discord.ext import commands
 import os, asyncio, json, re, ast, inspect
-from discord import Guild
+from discord import Guild, utils
 import discord
+from typing import List
+from discord.commands import slash_command
 
 def source(o):
     s = inspect.getsource(o).split("\n")
@@ -44,11 +46,6 @@ async def on_ready():
     print(f"{bot.user} is Online!!")
 
 @bot.event
-async def on_command_error(ctx: Context, error: Exception):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.reply(f"**This command does not exist!**")
-
-@bot.event
 async def on_guild_remove(guild: Guild):
     with open("bot/prefixes.json", 'r') as f:
         prefixes = json.load(f)
@@ -79,7 +76,7 @@ async def prefix(ctx: Context, new_prefix: str):
 async def prefix_error(ctx: Context, error: Exception):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.reply("**Incorrect usage!\n"
-                        f"Example: {get_prefix(bot, ctx)}prefix `Your new Prefix`**")
+                        f"Example: {get_prefix(bot, ctx)}prefix `Your_new_Prefix`**")
     elif isinstance(error, commands.MissingPermissions):
         await ctx.reply("**You do not have the permission to change the server prefix!**")
 
