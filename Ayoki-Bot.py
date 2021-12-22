@@ -1,9 +1,10 @@
 from discord.ext.commands.context import Context
 from discord.ext.commands import has_permissions
 from discord.ext import commands
-import os, asyncio, json, re, ast, inspect
+import os, asyncio, json, re, ast, inspect, aiohttp
 from discord import Guild, utils
 import discord
+from urllib import parse
 from typing import List
 
 def source(o):
@@ -32,8 +33,8 @@ def get_prefix(bot_obj, message: Context) -> str:
         return '!'
     except KeyError:
         return '!'
-
-bot = commands.Bot(command_prefix=get_prefix)
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 
 for filename in os.listdir("./cogs"):  
     if filename.endswith(".py"):
@@ -79,6 +80,44 @@ async def prefix_error(ctx: Context, error: Exception):
     elif isinstance(error, commands.MissingPermissions):
         await ctx.reply("**You do not have the permission to change the server prefix!**")
 
+snipe_message_content = None
+snipe_message_author = None
+snipe_message_id = None
+
+
+@bot.event
+async def on_message_delete(message):
+
+    global snipe_message_content
+    global snipe_message_author
+    global snipe_message_id
+
+    snipe_message_content = message.content
+    snipe_message_author = message.author.id
+    snipe_message_id = message.id
+    await asyncio.sleep(60)
+
+    if message.id == snipe_message_id:
+        snipe_message_author = None
+        snipe_message_content = None
+        snipe_message_id = None
+
+
+@bot.command(help='shows the last delted message of any user')
+async def snipe(message):
+    if snipe_message_content == None:
+        await message.channel.send("Theres nothing to snipe.")
+    else:
+        embed = discord.Embed(title='Message Deleted at Last',
+                              description=f"`deleted`: {snipe_message_content}")
+        embed.set_thumbnail(
+            url='https://c4.wallpaperflare.com/wallpaper/295/469/168/anime-anime-girls-gun-weapon-wallpaper-preview.jpg')
+        embed.set_footer(
+            text=f"Requested by by {message.author.name}#{message.author.discriminator}", icon_url=message.author.avatar_url)
+        embed.set_author(name=f'<@{snipe_message_author}>')
+        await message.channel.send(embed=embed)
+        return
+
 @bot.command()
 async def ping(ctx):
     async with ctx.typing():
@@ -98,5 +137,21 @@ async def ping(ctx):
         embed.set_thumbnail(
             url="https://i.pinimg.com/236x/51/63/94/5163941395dfb3f0ccf14ec98487bede.jpg")
     await ctx.send(embed=embed)
+
+@bot.event
+async def on_member_join(member: discord.Member):
+  order = sorted(member.guild.members, key=lambda member: member.joined_at or discord.utils.utcnow()).index(member) + 1
+  channel = member.guild.system_channel
+  if not channel: # There is no welcome channel
+    channel = discord.utils.find(lambda chan: "general" in chan.name.lower(), member.guild.text_channels, channel=922451779210346511) # find a channel that has 'general' in it.
+    if not channel:
+      channel = discord.utils.find(lambda chan: chan.permissions_for(member.guild.me).send_messages, member.guild.text_channels)
+      
+  bg_url = "https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png"
+  text_1 = parse.quote(f"Welcome to {member.guild.name}")
+  text_2 = f"{member.name}"
+  text_3 = parse.quote(f"You are #{order} member of the Server")
+ 
+  await channel.send(f"https://api.popcat.xyz/welcomecard?background={bg_url}&text1={text_1}&text2={text_2}&text3={text_3}&avatar={member.avatar.url}")
 
 bot.run('OTEyODk5MDA2OTkxMDY1MTQ4.YZ2pdA.CAQPvXpNLmwmkBcMgyhg4td5K6I')
