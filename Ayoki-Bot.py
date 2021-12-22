@@ -58,7 +58,7 @@ async def on_guild_remove(guild: Guild):
 
 @bot.command(aliases=["PREFIX", "Prefix", "pREFIX"])
 @has_permissions(administrator=True)
-async def prefix(ctx: Context, new_prefix: str):
+async def setprefixto(ctx: Context, new_prefix: str):
     if ctx.guild is None:
         await ctx.reply("**You cannot change the prefix outside of a server!**")
         return
@@ -72,7 +72,7 @@ async def prefix(ctx: Context, new_prefix: str):
         json.dump(prefixes, f, indent=25)
     await ctx.send(f"**Prefix changed to {new_prefix}**")
 
-@prefix.error
+@setprefixto.error
 async def prefix_error(ctx: Context, error: Exception):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.reply("**Incorrect usage!\n"
@@ -83,7 +83,6 @@ async def prefix_error(ctx: Context, error: Exception):
 snipe_message_content = None
 snipe_message_author = None
 snipe_message_id = None
-
 
 @bot.event
 async def on_message_delete(message):
@@ -113,30 +112,10 @@ async def snipe(message):
         embed.set_thumbnail(
             url='https://c4.wallpaperflare.com/wallpaper/295/469/168/anime-anime-girls-gun-weapon-wallpaper-preview.jpg')
         embed.set_footer(
-            text=f"Requested by by {message.author.name}#{message.author.discriminator}", icon_url=message.author.avatar_url)
-        embed.set_author(name=f'<@{snipe_message_author}>')
+            text=f"Requested by by {message.author.name}#{message.author.discriminator}", icon_url=message.author.avatar.url)
+        embed.add_field(name='Done By', value=f'<@{snipe_message_author}>')
         await message.channel.send(embed=embed)
         return
-
-@bot.command()
-async def ping(ctx):
-    async with ctx.typing():
-        await asyncio.sleep(0.1)
-    if round(bot.latency * 1000) <= 50:
-        embed = discord.Embed(
-            title="PONG", description=f":ping_pong: My latency is **{round(bot.latency *1000)}** milliseconds!", color=discord.Color.yellow())
-    elif round(bot.latency * 1000) <= 100:
-        embed = discord.Embed(
-            title="PONG", description=f":ping_pong: My latency is **{round(bot.latency *1000)}** milliseconds!", color=discord.Color.blue())
-    elif round(bot.latency * 1000) <= 200:
-        embed = discord.Embed(
-            title="PONG", description=f":ping_pong: My latency is **{round(bot.latency *1000)}** milliseconds!", color=discord.Color.red())
-    else:
-        embed = discord.Embed(
-            title="PONG", description=f":ping_pong: My latency is **{round(bot.latency *1000)}** milliseconds!", color=discord.Color.green())
-        embed.set_thumbnail(
-            url="https://i.pinimg.com/236x/51/63/94/5163941395dfb3f0ccf14ec98487bede.jpg")
-    await ctx.send(embed=embed)
 
 @bot.event
 async def on_member_join(member: discord.Member):
@@ -151,7 +130,38 @@ async def on_member_join(member: discord.Member):
   text_1 = parse.quote(f"Welcome to {member.guild.name}")
   text_2 = f"{member.name}"
   text_3 = parse.quote(f"You are #{order} member of the Server")
- 
   await channel.send(f"https://api.popcat.xyz/welcomecard?background={bg_url}&text1={text_1}&text2={text_2}&text3={text_3}&avatar={member.avatar.url}")
+
+WIKI_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
+NUMBER_OF_SENTENCES = 3  # (must be between 1 and 10)
+
+@bot.command(help='Search on Wikipedia')
+async def wiki(ctx, *query_elements):
+    async with ctx.typing():
+        await asyncio.sleep(1)
+    query = ' '.join(query_elements)
+    params = {
+        "action": "query",
+        "prop": "extracts",
+        "titles": query,
+        "exsentences": NUMBER_OF_SENTENCES,
+        "explaintext": "true",
+        "format": "json",
+        "redirects": "true"
+    }
+    headers = {"User-Agent": "BOT-NAME_CHANGE-ME/1.0"}
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(WIKI_ENDPOINT, params=params, headers=headers) as r:
+            data = await r.json()
+            pages = data['query']['pages']
+            page = pages[list(pages)[0]]
+            try:
+                extract = page['extract']
+                if extract is None:
+                    raise ValueError
+            except:
+                extract = f"We could not fetch an extract for this page. Perhaps it does not exist, or the wiki queried does not support the **TextExtracts** MediaWiki extension: https://www.mediawiki.org/wiki/Extension:TextExtracts\nThe page data received is: `{page}`"
+            await ctx.send(extract)
 
 bot.run('OTEyODk5MDA2OTkxMDY1MTQ4.YZ2pdA.CAQPvXpNLmwmkBcMgyhg4td5K6I')
