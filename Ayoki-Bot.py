@@ -133,7 +133,7 @@ async def on_member_join(member: discord.Member):
   await channel.send(f"https://api.popcat.xyz/welcomecard?background={bg_url}&text1={text_1}&text2={text_2}&text3={text_3}&avatar={member.avatar.url}")
 
 WIKI_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
-NUMBER_OF_SENTENCES = 3  # (must be between 1 and 10)
+NUMBER_OF_SENTENCES = 3
 
 @bot.command(help='Search on Wikipedia')
 async def wiki(ctx, *query_elements):
