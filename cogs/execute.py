@@ -11,7 +11,7 @@ class Compiler(commands.Cog):
         self.client = client
 
     # --------------commands
-    @commands.command(help='compiles python Code.')
+    @commands.command(description='compiles python Code.')
     async def eval(self, ctx, *, arg):
         """
         : Do <`code here`

@@ -6,7 +6,7 @@ class Ads(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=['AD','Ad'])
     async def ad(self, ctx, *, member: discord.Member = None):
         async with ctx.typing():
             await asyncio.sleep(0.1)

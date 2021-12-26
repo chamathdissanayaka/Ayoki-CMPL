@@ -57,7 +57,6 @@ async def on_guild_remove(guild: Guild):
         pass
 
 @bot.command(aliases=["PREFIX", "Prefix", "pREFIX"])
-@has_permissions(administrator=True)
 async def setprefixto(ctx: Context, new_prefix: str):
     if ctx.guild is None:
         await ctx.reply("**You cannot change the prefix outside of a server!**")
@@ -77,8 +76,6 @@ async def prefix_error(ctx: Context, error: Exception):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.reply("**Incorrect usage!\n"
                         f"Example: {get_prefix(bot, ctx)}prefix `Your_new_Prefix`**")
-    elif isinstance(error, commands.MissingPermissions):
-        await ctx.reply("**You do not have the permission to change the server prefix!**")
 
 snipe_message_content = None
 snipe_message_author = None
@@ -113,7 +110,7 @@ async def snipe(message):
             url='https://c4.wallpaperflare.com/wallpaper/295/469/168/anime-anime-girls-gun-weapon-wallpaper-preview.jpg')
         embed.set_footer(
             text=f"Requested by by {message.author.name}#{message.author.discriminator}", icon_url=message.author.avatar.url)
-        embed.add_field(name='Done By', value=f'<@{snipe_message_author}>')
+        embed.add_field(name='MSG sendt By', value=f'<@{snipe_message_author}>')
         await message.channel.send(embed=embed)
         return
 
@@ -163,5 +160,13 @@ async def wiki(ctx, *query_elements):
             except:
                 extract = f"We could not fetch an extract for this page. Perhaps it does not exist, or the wiki queried does not support the **TextExtracts** MediaWiki extension: https://www.mediawiki.org/wiki/Extension:TextExtracts\nThe page data received is: `{page}`"
             await ctx.send(extract)
+
+class Help(commands.MinimalHelpCommand):
+    async def send_pages(self):
+        destination = self.get_destination()
+        for page in self.paginator.pages:
+            emby = discord.Embed(description=page, color=0xFF007F)
+            await destination.send(embed=emby)
+bot.help_command = Help()
 
 bot.run('OTEyODk5MDA2OTkxMDY1MTQ4.YZ2pdA.CAQPvXpNLmwmkBcMgyhg4td5K6I')

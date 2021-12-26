@@ -146,7 +146,7 @@ class TicTacToeCog(commands.Cog):
 
     @commands.command()
     async def tictactoe(self, ctx, member: discord.Member = None):
-        """Start a tic tac toe game with urself u fucking lonely ass dick"""
+        """Start a TicTacToe Game"""
 
         await ctx.send(
             "Tic Tac Toe Game! **X** goes first.",
