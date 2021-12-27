@@ -169,4 +169,10 @@ class Help(commands.MinimalHelpCommand):
             await destination.send(embed=emby)
 bot.help_command = Help()
 
+@bot.command(help="Get any member's pfp")
+async def aww(ctx, *,  avamember: discord.Member = None):
+    userAvatarUrl = avamember.avatar.url
+    await ctx.send(userAvatarUrl)
+
 bot.run('OTEyODk5MDA2OTkxMDY1MTQ4.YZ2pdA.CAQPvXpNLmwmkBcMgyhg4td5K6I')
+
